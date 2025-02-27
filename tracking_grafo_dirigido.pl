@@ -9,4 +9,17 @@ conexion(calgary,regina,14).
 conexion(regina,winnipeg,4).
 conexion(regina,saskatoon,7).
 %reglas
+
 aristas(X):- conexion(X,_,_).
+
+conectado(X, Y) :- conexion(X, Y, _).
+conectado(X, Y) :- conexion(X, Z, _), conectado(Z, Y).
+
+existe_conexion(X, Y) :- conectado(X, Y).
+conexiones_regina :- listar_conexiones(regina).
+listar_conexiones(Ciudad) :-
+    conexion(Ciudad, Destino, Costo),
+    writeln((Destino, Costo)),
+    fail.
+listar_conexiones(_).
+viaje_posible(X, Y) :- existe_conexion(X, Y).
