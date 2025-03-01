@@ -24,13 +24,21 @@ costo_viaje(X, Y, Z, TotalC) :-
     conexion(Y, Z, C2),
     TotalC is C1 + C2.
 
-% Regla para obtener todas las conexiones de una ciudad
-todas_conexiones(City) :-
-    conexiones(City).
+% Regla para obtener todas las conexiones de una ciudad y sus costos
+conexiones(City) :- lista_conexiones(City).
 
-% Regla para obtener e imprimir las conexiones de una ciudad y su costo
-conexiones(City) :-
+% Regla para listar las conexiones
+lista_conexiones(City) :-
     conexion(City, Destination, C),
     writeln((Destination, C)),
-    conexiones(City).
-conexiones(_).
+    conexiones_auxiliares(City, Destination, C). 
+
+% Caso base
+conexiones_auxiliares(_, _, _). 
+
+% Regla para seguir listando conexiones sin repetirse
+conexiones_auxiliares(City, Destination, C) :- 
+    conexion(City, Destination1, C1),
+    (Destination1 \= Destination ; C1 \= C), 
+    writeln((Destination1, C1)),
+    conexiones_auxiliares(City, Destination1, C1).
