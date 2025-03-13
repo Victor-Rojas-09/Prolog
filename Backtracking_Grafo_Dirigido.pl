@@ -18,10 +18,13 @@ viajar_entre(X, Y) :- conexion(X, Z, _), viajar_entre(Z, Y).
 % Regla para verificar si un nodo tiene conexiones
 tiene_aristas(Nodo) :- conexion(Nodo, _, _); conexion(_, Nodo, _).
 
-% Regla para calcular el costo de viajar de X a Z pasando por Y
-costo_viaje(X, Y, Z, TotalC) :-
+% Regla base: Si hay una conexión directa, el costo es el mismo.
+costo_viaje(X, Y, C) :- conexion(X, Y, C).
+
+% Regla recursiva: Si hay una conexión de X a Z pasando por Y,
+costo_viaje(X, Z, TotalC) :-
     conexion(X, Y, C1),
-    conexion(Y, Z, C2),
+    costo_viaje(Y, Z, C2),
     TotalC is C1 + C2.
 
 % Regla para obtener todas las conexiones de una ciudad y sus costos
